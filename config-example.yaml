@@ -1,0 +1,6 @@
+block_output: true
+interface: ens33
+m_icmp: 5
+m_syn: 3
+m_udp: 10
+window: 0.5
