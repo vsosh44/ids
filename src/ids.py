@@ -81,6 +81,8 @@ async def main():
             logger.error(f"Интерфейс {settings.interface} не найден")
             exit(-1)
         raise
+
+    sniffer.start()
     print(f"IDS запущена на интерфейсе {settings.interface}")
 
     loop = asyncio.get_running_loop()
