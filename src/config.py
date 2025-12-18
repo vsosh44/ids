@@ -11,12 +11,12 @@ CONFIG_FILE = "config.yaml"
 class Settings(BaseModel):
     interface: str = Field(description="Имя сетевого интерейса")
 
-    window: float
-    m_syn: float
-    m_icmp: float
-    m_udp: float
+    window: float = Field(description="Окно подсчёта пакетов")
+    m_syn: float = Field(description="Порог SYN, 1/сек")
+    m_icmp: float = Field(description="Порог ICMP, 1/сек")
+    m_udp: float = Field(description="Порог UDP, 1/сек")
 
-    block_output: bool
+    block_output: bool = Field(description="Блокировка исходящих пакетов")
 
 
 def save_settings(settings: Settings):
