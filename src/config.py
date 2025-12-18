@@ -9,14 +9,14 @@ CONFIG_FILE = "config.yaml"
 
 
 class Settings(BaseModel):
-    interface: str = Field(description="Имя сетевого интерейса")
+    interface: str = Field(description="Имя сетевого интерейса", default="ens33")
 
-    window: float = Field(description="Окно подсчёта пакетов")
-    m_syn: float = Field(description="Порог SYN, 1/сек")
-    m_icmp: float = Field(description="Порог ICMP, 1/сек")
-    m_udp: float = Field(description="Порог UDP, 1/сек")
+    window: float = Field(description="Окно подсчёта пакетов", default=0.5)
+    m_syn: float = Field(description="Порог SYN, 1/сек", default=3.0)
+    m_icmp: float = Field(description="Порог ICMP, 1/сек", default=5.0)
+    m_udp: float = Field(description="Порог UDP, 1/сек", default=10.0)
 
-    block_output: bool = Field(description="Блокировка исходящих пакетов")
+    block_output: bool = Field(description="Блокировка исходящих пакетов", default=False)
 
 
 def save_settings(settings: Settings):
@@ -30,8 +30,7 @@ def load_settings() -> Settings:
             data = yaml.safe_load(f) or {}
         return Settings(**data)
     except FileNotFoundError:
-        logger.error("config file not found")
-        exit(-1)
+        save_settings(Settings())
     except ValidationError as exc:
         logger.error(f"config file validation error:\n{str(exc)}")
         exit(-1)
