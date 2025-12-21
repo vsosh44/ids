@@ -15,6 +15,10 @@ sudo git clone https://github.com/nikita463/ids.git $PROJECT_DIR
 sudo chown -R $USER:$USER $PROJECT_DIR
 
 
+python3 -m venv $PROJECT_DIR/venv
+$PROJECT_DIR/venv/bin/pip3 install -r requirements.txt
+
+
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
 [Unit]
 Description=Network IDS
