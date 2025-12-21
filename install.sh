@@ -27,7 +27,7 @@ Description=Network IDS
 After=network.target
 
 [Service]
-ExecStart=python3 -m $PROJECT_DIR.src.ids.ids
+ExecStart=venv/bin/python3 -m src.ids.ids
 Restart=always
 User=$USER
 WorkingDirectory=$PROJECT_DIR
