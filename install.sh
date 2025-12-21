@@ -1,17 +1,18 @@
 #!/bin/bash
 set -eo pipefail
 
-PROJECT_DIR="/opt/network_ids"
 
-sudo mkdir -p $PROJECT_DIR
-sudo git clone https://github.com/nikita463/ids.git $PROJECT_DIR
-sudo chown -R $USER:$USER $PROJECT_DIR
+PROJECT_DIR="/opt/network_ids"
+SERVICE_DIR="/etc/systemd/system"
+SERVICE_NAME="network_ids.service"
 
 MAIN_SERVICE="$PROJECT_DIR/src/ids/ids.py"
 CLI_TOOL="$PROJECT_DIR/src/menu/menu.py"
 
-SERVICE_DIR="/etc/systemd/system"
-SERVICE_NAME="network_ids.service"
+
+sudo mkdir -p $PROJECT_DIR
+sudo git clone https://github.com/nikita463/ids.git $PROJECT_DIR
+sudo chown -R $USER:$USER $PROJECT_DIR
 
 
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
