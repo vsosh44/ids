@@ -5,8 +5,8 @@ sys.path.insert(0, '/opt/network_ids')
 
 import os
 
-from src.config import Settings, load_settings, save_settings
 from src.menu.utils import get_field_info, ret_str_type
+from src.config import Settings, load_settings, save_settings
 
 
 def clear_screen():
