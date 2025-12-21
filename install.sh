@@ -1,6 +1,8 @@
 #!/bin/bash
 set -eo pipefail
 
+sudo apt install python3 python3.13-venv git
+
 
 PROJECT_DIR="/opt/network_ids"
 SERVICE_DIR="/etc/systemd/system"
