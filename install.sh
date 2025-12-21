@@ -18,7 +18,7 @@ sudo chown -R $USER:$USER $PROJECT_DIR
 
 
 python3 -m venv $PROJECT_DIR/venv
-$PROJECT_DIR/venv/bin/pip3 install -r requirements.txt
+$PROJECT_DIR/venv/bin/pip3 install -r $PROJECT_DIR/requirements.txt
 
 
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
