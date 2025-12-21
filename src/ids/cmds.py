@@ -1,6 +1,6 @@
 from subprocess import Popen, PIPE
-from database import add_ip, remove_ip
-from config import settings
+from src.database import add_ip, remove_ip
+from src.config import settings
 
 def run_cmd(cmd: str) -> tuple[int, str, str]:
     list_cmd = cmd.split()

@@ -5,9 +5,9 @@ from scapy.all import sniff, IP, TCP, ICMP, UDP, AsyncSniffer
 from collections import defaultdict
 import time
 
-from config import settings, check_config
-from cmds import get_host_ip, block_ip
-from database import init_db, get_blocked_ips
+from src.config import settings, check_config
+from src.database import init_db, get_blocked_ips
+from src.ids.cmds import get_host_ip, block_ip
 
 logger = getLogger(__name__)
 stop_event = asyncio.Event()

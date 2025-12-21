@@ -1,43 +1,11 @@
 import os
-from pydantic import BaseModel
-from typing import Optional, Any
 
-from config import Settings, load_settings, save_settings
-
-CONFIG_FILE = "config.yaml"
+from src.config import Settings, load_settings, save_settings
+from src.menu.utils import get_field_info, ret_str_type
 
 
-class FieldInfo(BaseModel):
-    name: str
-    value: object
-    description: str
-    annotation: type
-
-
-def get_field_info(model: BaseModel, ind: int) -> FieldInfo:
-    field = list(type(model).model_fields.items())[ind]
-    name, info = field
-    description = getattr(info, "description")
-    value = getattr(model, name)
-    annotation = getattr(info, "annotation")
-    return FieldInfo(
-        name=name,
-        value=value,
-        description=description if description else "",
-        annotation=annotation
-    )
-
-
-def ret_str_type(s: str, t: type) -> Optional[Any]:
-    try:
-        if t is bool:
-            if s.lower() == "true": return True
-            elif s.lower() == "false": return False
-            else: return None
-        
-        return t(s)
-    except (ValueError, TypeError):
-        return None
+def clear_screen():
+    os.system("clear")
 
 
 def edit_settings_menu(settings: Settings):
@@ -67,10 +35,6 @@ def edit_settings_menu(settings: Settings):
 
     setattr(settings, field_info.name, type_obj)
     save_settings(settings)
-
-
-def clear_screen():
-    os.system("clear")
 
 
 def main_menu():
