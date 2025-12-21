@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+
+import sys
+sys.path.insert(0, '/opt/network_ids')
+
 import os
 
 from src.config import Settings, load_settings, save_settings
