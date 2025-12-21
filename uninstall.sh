@@ -14,4 +14,4 @@ systemctl disable "$SERVICE_NAME"
 systemctl stop "$SERVICE_NAME"
 
 rm -rf $PROJECT_DIR
-rm $MAIN_SERVICE
+rm $SERVICE_DIR/$SERVICE_NAME
