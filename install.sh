@@ -20,7 +20,7 @@ sudo chown -R $USER:$USER $PROJECT_DIR
 python3.13 -m venv $PROJECT_DIR/venv
 $PROJECT_DIR/venv/bin/pip install -r $PROJECT_DIR/requirements.txt
 
-curl -o $PROJECT_DIR/config.yaml https://raw.githubusercontent.com/nikita463/ids/refs/heads/main/config-example.yaml
+mv $PROJECT_DIR/config-example.yaml $PROJECT_DIR/config.yaml
 
 
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
