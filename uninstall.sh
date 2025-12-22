@@ -7,7 +7,7 @@ SERVICE_DIR="/etc/systemd/system"
 SERVICE_NAME="network_ids.service"
 
 MAIN_SERVICE="$PROJECT_DIR/src/ids/ids.py"
-CLI_TOOL="$PROJECT_DIR/src/menu/menu.py"
+MENU_PATH="$PROJECT_DIR/src/menu/menu.py"
 
 
 systemctl disable "$SERVICE_NAME"
