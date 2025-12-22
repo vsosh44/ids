@@ -29,7 +29,7 @@ Description=Network IDS
 After=network.target
 
 [Service]
-ExecStart=venv/bin/python -m src.ids.ids
+ExecStart=$PROJECT_DIR/venv/bin/python -m src.ids.ids
 Restart=always
 User=$USER
 WorkingDirectory=$PROJECT_DIR
