@@ -39,6 +39,7 @@ WantedBy=multi-user.target
 EOF
 
 
-#sudo systemctl daemon-reload
+sudo systemctl daemon-reload
+
 #sudo systemctl enable "$SERVICE_NAME"
 #sudo systemctl start "$SERVICE_NAME"

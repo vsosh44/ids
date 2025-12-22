@@ -2,12 +2,7 @@ from subprocess import Popen, PIPE
 
 from src.database import add_ip, remove_ip
 from src.config import settings
-
-def run_cmd(cmd: str) -> tuple[int, str, str]:
-    list_cmd = cmd.split()
-    p = Popen(list_cmd, stdout=PIPE, stderr=PIPE, text=True)
-    out, err = p.communicate()
-    return p.returncode, out, err
+from src.cmd_utils import run_cmd
 
 
 def block_ip(ip: str) -> bool:

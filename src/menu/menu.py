@@ -4,13 +4,36 @@ import sys
 sys.path.insert(0, '/opt/network_ids')
 
 import os
+from typing import Optional
+from time import sleep
 
 from src.menu.utils import get_field_info, ret_str_type
 from src.config import Settings, load_settings, save_settings
+from src.cmd_utils import run_cmd
 
 
 def clear_screen():
     os.system("clear")
+
+
+def enable_service(service_name="network_ids.service") -> Optional[str]:
+    _, _, err = run_cmd(f"sudo systemctl enable {service_name}")
+    return err if len(err) > 0 else None
+
+
+def disable_service(service_name="network_ids.service") -> Optional[str]:
+    _, _, err = run_cmd(f"sudo systemctl disable {service_name}")
+    return err if len(err) > 0 else None
+
+
+def start_service(service_name="network_ids.service") -> Optional[str]:
+    _, _, err = run_cmd(f"sudo systemctl start {service_name}")
+    return err if len(err) > 0 else None
+
+
+def stop_service(service_name="network_ids.service") -> Optional[str]:
+    _, _, err = run_cmd(f"sudo systemctl stop {service_name}")
+    return err if len(err) > 0 else None
 
 
 def edit_settings_menu(settings: Settings):
@@ -50,18 +73,41 @@ def main_menu():
 
         print("Меню ids:")
         print("1) Редактирование настроек")
-        print("\n2) Выход")
+        print("2) Запустить сервис")
+        print("3) Остановить сервис")
+        print("4) Добавить в автозапуск")
+        print("5) Удалить из автозапуска")
+        print("\n6) Выход")
 
         choice = input("\nВыберите номер действия: ")
-        while not choice.isdigit() or not 1 <= int(choice) <= 2:
+        while not choice.isdigit() or not 1 <= int(choice) <= 6:
             choice = input("Введите число - номер действия: ")
 
-        clear_screen()
-
-        if choice == "1":
-            edit_settings_menu(settings)
-        if choice == "2":
-            break
+        match choice:
+            case "1":
+                clear_screen()
+                edit_settings_menu(settings)
+            case "2":
+                err = start_service()
+                if err:
+                    print("Ошибка:", err)
+                    sleep(3)
+            case "3":
+                err = stop_service()
+                if err:
+                    print("Ошибка:", err)
+                    sleep(3)
+            case "4":
+                err = enable_service()
+                if err:
+                    print("Ошибка:", err)
+                    sleep(3)
+            case "5":
+                err = disable_service()
+                if err:
+                    print("Ошибка:", err)
+                    sleep(3)
+            case _: break
     
     clear_screen()
 
