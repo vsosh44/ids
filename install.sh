@@ -9,7 +9,7 @@ SERVICE_DIR="/etc/systemd/system"
 SERVICE_NAME="network_ids.service"
 
 MAIN_SERVICE="$PROJECT_DIR/src/ids/ids.py"
-CLI_TOOL="$PROJECT_DIR/src/menu/menu.py"
+MENU_PATH="$PROJECT_DIR/src/menu/menu.py"
 
 
 sudo mkdir -p $PROJECT_DIR
@@ -19,6 +19,8 @@ sudo chown -R $USER:$USER $PROJECT_DIR
 
 python3.13 -m venv $PROJECT_DIR/venv
 $PROJECT_DIR/venv/bin/pip install -r $PROJECT_DIR/requirements.txt
+
+curl -o $PROJECT_DIR/config.yaml https://raw.githubusercontent.com/nikita463/ids/refs/heads/main/config-example.yaml
 
 
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
@@ -37,6 +39,6 @@ WantedBy=multi-user.target
 EOF
 
 
-sudo systemctl daemon-reload
-sudo systemctl enable "$SERVICE_NAME"
-sudo systemctl start "$SERVICE_NAME"
+#sudo systemctl daemon-reload
+#sudo systemctl enable "$SERVICE_NAME"
+#sudo systemctl start "$SERVICE_NAME"
