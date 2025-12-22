@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
-sudo apt install python3 python3.13-venv git
+sudo apt install python3.13 python3.13-venv git
 
 
 PROJECT_DIR="/opt/network_ids"
@@ -17,8 +17,8 @@ sudo git clone https://github.com/nikita463/ids.git $PROJECT_DIR
 sudo chown -R $USER:$USER $PROJECT_DIR
 
 
-python3 -m venv $PROJECT_DIR/venv
-$PROJECT_DIR/venv/bin/pip3 install -r $PROJECT_DIR/requirements.txt
+python3.13 -m venv $PROJECT_DIR/venv
+$PROJECT_DIR/venv/bin/pip install -r $PROJECT_DIR/requirements.txt
 
 
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
@@ -27,7 +27,7 @@ Description=Network IDS
 After=network.target
 
 [Service]
-ExecStart=venv/bin/python3 -m src.ids.ids
+ExecStart=venv/bin/python -m src.ids.ids
 Restart=always
 User=$USER
 WorkingDirectory=$PROJECT_DIR
