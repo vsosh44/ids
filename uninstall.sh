@@ -1,6 +1,4 @@
 #!/bin/bash
-set -eo pipefail
-
 
 PROJECT_DIR="/opt/network_ids"
 SERVICE_DIR="/etc/systemd/system"

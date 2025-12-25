@@ -1,5 +1,4 @@
 #!/bin/bash
-set -eo pipefail
 
 sudo apt install python3.13 python3.13-venv git
 
