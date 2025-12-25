@@ -22,6 +22,9 @@ $PROJECT_DIR/venv/bin/pip install -r $PROJECT_DIR/requirements.txt
 
 mv $PROJECT_DIR/config-example.yaml $PROJECT_DIR/config.yaml
 
+chmod +x $PROJECT_DIR/network_ids.sh
+ln $PROJECT_DIR/network_ids.sh /usr/bin/network_ids
+
 
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
 [Unit]
