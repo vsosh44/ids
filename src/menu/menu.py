@@ -1,7 +1,4 @@
-#!/usr/bin/env python3
-
-import sys
-sys.path.insert(0, '/opt/network_ids')
+#!/opt/network_ids/venv/bin/python
 
 import os
 from typing import Optional
