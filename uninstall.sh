@@ -11,5 +11,6 @@ MENU_PATH="$PROJECT_DIR/src/menu/menu.py"
 systemctl disable "$SERVICE_NAME"
 systemctl stop "$SERVICE_NAME"
 
+rm /usr/bin/network_ids
 rm -rf $PROJECT_DIR
 rm $SERVICE_DIR/$SERVICE_NAME
