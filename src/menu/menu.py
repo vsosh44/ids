@@ -84,26 +84,10 @@ def main_menu():
             case "1":
                 clear_screen()
                 edit_settings_menu(settings)
-            case "2":
-                err = start_service()
-                if err:
-                    print("Ошибка:", err)
-                    sleep(3)
-            case "3":
-                err = stop_service()
-                if err:
-                    print("Ошибка:", err)
-                    sleep(3)
-            case "4":
-                err = enable_service()
-                if err:
-                    print("Ошибка:", err)
-                    sleep(3)
-            case "5":
-                err = disable_service()
-                if err:
-                    print("Ошибка:", err)
-                    sleep(3)
+            case "2": start_service()
+            case "3": stop_service()
+            case "4": enable_service()
+            case "5": disable_service()
             case _: break
     
     clear_screen()
