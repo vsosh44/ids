@@ -1,10 +1,9 @@
 import os
 import asyncio
 from pydantic import BaseModel, Field, ValidationError
-from logging import getLogger
 import yaml
+from src.logs import logger
 
-logger = getLogger(__name__)
 CONFIG_FILE = "config.yaml"
 
 
@@ -32,7 +31,7 @@ def load_settings() -> Settings:
     except FileNotFoundError:
         save_settings(Settings())
     except ValidationError as exc:
-        logger.error(f"config file validation error:\n{str(exc)}")
+        logger.error(f"[ERROR] config file validation error:\n{str(exc)}")
         exit(-1)
 
 
@@ -47,5 +46,5 @@ async def check_config():
         if mtime != last_mtime:
             last_mtime = mtime
             settings = load_settings()
-            print("Конфиг загружен")
+            logger.info("Config updated")
         await asyncio.sleep(1)

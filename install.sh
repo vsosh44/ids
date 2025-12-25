@@ -24,6 +24,8 @@ mv $PROJECT_DIR/config-example.yaml $PROJECT_DIR/config.yaml
 chmod +x $PROJECT_DIR/network_ids.sh
 ln $PROJECT_DIR/network_ids.sh /usr/bin/network_ids
 
+sudo mkdir -p /var/log/network_ids
+
 
 cat << EOF | sudo tee "$SERVICE_DIR/$SERVICE_NAME" >/dev/null
 [Unit]
