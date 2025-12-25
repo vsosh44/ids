@@ -34,6 +34,7 @@ def stop_service(service_name="network_ids.service") -> Optional[str]:
 
 def delete_service() -> Optional[str]:
     run_cmd("bash /opt/network_ids/uninstall.sh")
+    exit(0)
 
 
 def edit_settings_menu(settings: Settings):
