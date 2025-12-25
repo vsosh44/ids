@@ -81,10 +81,11 @@ def main_menu():
         print("5) Удалить из автозапуска")
         print()
         print("6) Удалить")
+        print()
         print("7) Выход")
 
         choice = input("\nВыберите номер действия: ")
-        while not choice.isdigit() or not 1 <= int(choice) <= 6:
+        while not choice.isdigit() or not 1 <= int(choice) <= 7:
             choice = input("Введите число - номер действия: ")
 
         match choice:
