@@ -32,6 +32,9 @@ def stop_service(service_name="network_ids.service") -> Optional[str]:
     _, _, err = run_cmd(f"sudo systemctl stop {service_name}")
     return err if len(err) > 0 else None
 
+def delete_service() -> Optional[str]:
+    run_cmd("bash /opt/network_ids/uninstall.sh")
+
 
 def edit_settings_menu(settings: Settings):
     print("Редактирование настроек:")
@@ -70,11 +73,15 @@ def main_menu():
 
         print("Меню ids:")
         print("1) Редактирование настроек")
+        print()
         print("2) Запустить сервис")
         print("3) Остановить сервис")
+        print()
         print("4) Добавить в автозапуск")
         print("5) Удалить из автозапуска")
-        print("\n6) Выход")
+        print()
+        print("6) Удалить")
+        print("7) Выход")
 
         choice = input("\nВыберите номер действия: ")
         while not choice.isdigit() or not 1 <= int(choice) <= 6:
@@ -88,6 +95,7 @@ def main_menu():
             case "3": stop_service()
             case "4": enable_service()
             case "5": disable_service()
+            case "6": delete_service()
             case _: break
     
     clear_screen()
