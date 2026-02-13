@@ -2,7 +2,6 @@
 
 import os
 from typing import Optional
-from time import sleep
 
 from src.menu.utils import get_field_info, ret_str_type
 from src.config import Settings, load_settings, save_settings

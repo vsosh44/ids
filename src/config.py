@@ -18,12 +18,12 @@ class Settings(BaseModel):
     block_output: bool = Field(description="Блокировка исходящих пакетов", default=False)
 
 
-def save_settings(settings: Settings):
+def save_settings(setts: Settings):
     with open(CONFIG_FILE, "w") as f:
-        yaml.dump(settings.model_dump(), f)
+        yaml.dump(setts.model_dump(), f)
 
 
-def load_settings() -> Settings:
+def load_settings() -> Settings | None:
     try:
         with open(CONFIG_FILE, "r") as f:
             data = yaml.safe_load(f) or {}

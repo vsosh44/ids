@@ -1,6 +1,6 @@
 # Network IDS
 
-Программа анализирует сетевой трафик в реальном времени, обраруживает аномалии и блокирует атакующий IP.
+Программа анализирует сетевой трафик в реальном времени, обнаруживает аномалии и блокирует атакующий IP.
 
 
 ## Установка
@@ -23,7 +23,7 @@ network_ids
 ```
 
 <p align="center">
-<img style="" src="https://github.com/nikita463/ids/blob/main/images/menu.png?raw=true" width=250>
+<img alt="" src="https://github.com/nikita463/ids/blob/main/images/menu.png?raw=true" width=250>
 </p>
 
 
@@ -31,15 +31,15 @@ network_ids
 Для изменения настройки надо ввести номер поля и его новое значение указанного типа.
 
 <p align="center">
-<img style="" src="https://github.com/nikita463/ids/blob/main/images/settings.png?raw=true" width=500>
+<img alt="" src="https://github.com/nikita463/ids/blob/main/images/settings.png?raw=true" width=500>
 </p>
 
 <p align="center">
-<img style="" src="https://github.com/nikita463/ids/blob/main/images/set_settings.png?raw=true" width=500>
+<img alt="" src="https://github.com/nikita463/ids/blob/main/images/set_settings.png?raw=true" width=500>
 </p>
 
 
-В меню можно запускать и останавливать сервис, а так же добавлять и удалять его из автозапуска после загрузки системы.
+В меню можно запускать и останавливать сервис, а также добавлять и удалять его из автозапуска после загрузки системы.
 
 
 Выбрав шестое действие, можно удалить полностью программу, сохранив логи.
@@ -49,7 +49,7 @@ network_ids
 
 Программа сохраняет все аномалии в сети в файл `/var/log/network_ids/network_ids.log`
 
-Прочитать его можно используя следующую команду
+Прочитать его можно, используя следующую команду
 
 ```bash
 less /var/log/network_ids/network_ids.log
