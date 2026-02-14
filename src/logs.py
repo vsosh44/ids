@@ -1,19 +1,12 @@
-from logging.handlers import RotatingFileHandler
 import logging
 
 logger = logging.getLogger("network_ids")
 logger.setLevel(logging.INFO)
 
-handler = RotatingFileHandler(
-    "/var/log/network_ids/network_ids.log",
-    maxBytes=10 * 1024 * 1024,
-    backupCount=5,
-    encoding="utf-8"
-)
+if not logger.handlers:
+    handler = logging.StreamHandler()
+    handler.setLevel(logging.INFO)
+    handler.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
+    logger.addHandler(handler)
 
-formatter = logging.Formatter(
-    "%(asctime)s: %(message)s"
-)
-handler.setFormatter(formatter)
-
-logger.addHandler(handler)
+logger.propagate = False

@@ -84,7 +84,7 @@ def block_ip(ip: str) -> bool:
         logger.error(f"Invalid IP address: {ip}")
         return False
 
-    remove_ip(ip)
+    add_ip(ip)
     if platform.system() == "Linux":
         return block_ip_linux(ip)
     elif platform.system() == "Windows":
@@ -97,7 +97,7 @@ def unblock_ip(ip: str) -> bool:
         logger.error(f"Invalid IP address: {ip}")
         return False
 
-    add_ip(ip)
+    remove_ip(ip)
     if platform.system() == "Linux":
         return unblock_ip_linux(ip)
     elif platform.system() == "Windows":
