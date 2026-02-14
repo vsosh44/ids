@@ -4,11 +4,13 @@ from collections import defaultdict, deque
 from scapy.all import IP, TCP
 
 from src.ids.cmds import block_ip
+from src.database import get_blocked_ips
 from src.logs import logger
 from src.ids.check_ip import check_ip
 import src.ids.base as ids_base
 
 syn_packets = defaultdict(deque)
+blocked_ips: set = get_blocked_ips()
 last_reset = time.time()
 learning_phase = True
 threshold_pps = 12.0
@@ -44,6 +46,7 @@ def attack(pkt):
 
     if (IP in pkt and
         pkt[IP].dst == ids_base.HOST_IP and
+        pkt[IP].src not in blocked_ips and
         TCP in pkt and
         pkt[TCP].flags == 2):
 
@@ -65,4 +68,5 @@ def attack(pkt):
                             f"Rate: {current_pps:.1f} pps | Threshold: {threshold_pps:.1f} pps")
 
                 block_ip(src_ip)
+                blocked_ips.add(src_ip)
                 syn_packets[src_ip].clear()
