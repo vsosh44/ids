@@ -13,13 +13,13 @@ syn_packets = defaultdict(deque)
 blocked_ips: set = get_blocked_ips()
 last_reset = time.time()
 learning_phase = True
-threshold_pps = 12.0
-WINDOW = 5.0
 
-
-def prune_queue(q: deque, now: float, window: float) -> None:
-    while q and now - q[0] > window:
-        q.popleft()
+threshold_pps = 20.0
+min_pps = 8.0
+max_pps = 50.0
+learning_k = 3
+adaptive_k = 3.2
+WINDOW = 2.0
 
 
 def attack(pkt):
@@ -28,19 +28,13 @@ def attack(pkt):
     now = time.time()
 
     if now - last_reset > 30:
-        for q in syn_packets.values():
-            prune_queue(q, now, WINDOW)
-
-        total = sum(len(q) for q in syn_packets.values())
-        avg_pps = total / WINDOW if WINDOW > 0 else 0.0
-
-        if learning_phase and syn_packets:
-            threshold_pps = max(8.0, min(50.0, avg_pps * 3.0))
-            logger.info(f"[ADAPTATION] Training completed. New threshold: {threshold_pps:.1f} packets/sec")
-            learning_phase = False
-        else:
-            threshold_pps = max(8.0, min(50.0, avg_pps * 3.2))
-            logger.info(f"[ADAPTATION] New threshold: {threshold_pps:.1f} packets/sec")
+        learning_phase, threshold_pps = ids_base.update_thresholds(
+            syn_packets,
+            now,
+            learning_phase,
+            min_pps, max_pps,
+            learning_k, adaptive_k
+        )
 
         last_reset = now
 
@@ -55,13 +49,11 @@ def attack(pkt):
 
         syn_packets[src_ip].append(now)
 
-        prune_queue(syn_packets[src_ip], now, WINDOW)
-
-        current_pps = len(syn_packets[src_ip]) / WINDOW
+        current_pps, avg_pps = ids_base.get_pps(syn_packets, src_ip, now, WINDOW)
 
         logger.info(f"[SYN] {src_ip=}, port={dst_port}, rate={current_pps:.1f} pps")
 
-        if current_pps > threshold_pps:
+        if current_pps > threshold_pps and current_pps > avg_pps * 3:
             status, asn = check_ip(src_ip)
             if not status:
                 logger.info(f"[ATTACK] SYN-SCAN/FLOOD from {src_ip} | "

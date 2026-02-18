@@ -17,14 +17,9 @@ learning_phase = True
 threshold_pps = 20.0
 min_pps = 10.0
 max_pps = 100.0
-learning_k = 3.5
-adaptive_k = 4.0
+learning_k = 5
+adaptive_k = 6
 WINDOW = 5.0
-
-
-def prune_queue(q: deque, now: float, window: float) -> None:
-    while q and now - q[0] > window:
-        q.popleft()
 
 
 def attack(pkt):
@@ -33,19 +28,13 @@ def attack(pkt):
     now = time.time()
 
     if now - last_reset > 30:
-        for q in udp_packets.values():
-            prune_queue(q, now, WINDOW)
-
-        total = sum(len(q) for q in udp_packets.values())
-        avg_pps = total / WINDOW if WINDOW > 0 else 0.0
-
-        if learning_phase and udp_packets:
-            threshold_pps = max(8.0, min(50.0, avg_pps * 3.0))
-            logger.info(f"[ADAPTATION] Training completed. New threshold: {threshold_pps:.1f} packets/sec")
-            learning_phase = False
-        else:
-            threshold_pps = max(8.0, min(50.0, avg_pps * 3.2))
-            logger.info(f"[ADAPTATION] New threshold: {threshold_pps:.1f} packets/sec")
+        learning_phase, threshold_pps = ids_base.update_thresholds(
+            udp_packets,
+            now,
+            learning_phase,
+            min_pps, max_pps,
+            learning_k, adaptive_k
+        )
 
         last_reset = now
 
@@ -59,13 +48,11 @@ def attack(pkt):
 
         udp_packets[src_ip].append(now)
 
-        prune_queue(udp_packets[src_ip], now, WINDOW)
+        current_pps, avg_pps = ids_base.get_pps(udp_packets, src_ip, now, WINDOW)
 
-        current_pps = len(udp_packets[src_ip]) / WINDOW
+        logger.info(f"[SYN] {src_ip=}, port={dst_port}, rate={current_pps:.1f} pps")
 
-        logger.info(f"[UDP] {src_ip=}, port={dst_port}, rate={current_pps:.1f} pps")
-
-        if current_pps > threshold_pps:
+        if current_pps > threshold_pps and current_pps > avg_pps * 3:
             status, asn = check_ip(src_ip)
             if not status:
                 logger.info(f"[ATTACK] UDP-FLOOD from {src_ip} | "

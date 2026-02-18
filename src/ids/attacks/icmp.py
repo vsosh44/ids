@@ -22,30 +22,19 @@ adaptive_k = 2.8
 WINDOW = 5.0
 
 
-def prune_queue(q: deque, now: float, window: float) -> None:
-    while q and now - q[0] > window:
-        q.popleft()
-
-
 def attack(pkt):
     global last_reset, threshold_pps, learning_phase
 
     now = time.time()
 
     if now - last_reset > 30:
-        for q in icmp_packets.values():
-            prune_queue(q, now, WINDOW)
-
-        total = sum(len(q) for q in icmp_packets.values())
-        avg_pps = total / WINDOW if WINDOW > 0 else 0.0
-
-        if learning_phase and icmp_packets:
-            threshold_pps = max(min_pps, min(max_pps, avg_pps * learning_k))
-            logger.info(f"[ADAPTATION] Training completed. New threshold: {threshold_pps:.1f} packets/sec")
-            learning_phase = False
-        else:
-            threshold_pps = max(min_pps, min(max_pps, avg_pps * adaptive_k))
-            logger.info(f"[ADAPTATION] New threshold: {threshold_pps:.1f} packets/sec")
+        learning_phase, threshold_pps = ids_base.update_thresholds(
+            icmp_packets,
+            now,
+            learning_phase,
+            min_pps, max_pps,
+            learning_k, adaptive_k
+        )
 
         last_reset = now
 
@@ -59,13 +48,11 @@ def attack(pkt):
 
         icmp_packets[src_ip].append(now)
 
-        prune_queue(icmp_packets[src_ip], now, WINDOW)
+        current_pps, avg_pps = ids_base.get_pps(icmp_packets, src_ip, now, WINDOW)
 
-        current_pps = len(icmp_packets[src_ip]) / WINDOW
+        logger.info(f"[ICMP] {src_ip=}, rate={current_pps:.1f} pps")
 
-        logger.info(f"[PING] {src_ip=}, rate={current_pps:.1f} pps")
-
-        if current_pps > threshold_pps:
+        if current_pps > threshold_pps and current_pps > avg_pps * 3:
             status, asn = check_ip(src_ip)
             if not status:
                 logger.info(f"[ATTACK] ICMP-FLOOD from {src_ip} | "
