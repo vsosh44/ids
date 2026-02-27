@@ -1,5 +1,6 @@
 import asyncio
 import signal
+import os
 from scapy.all import IP, AsyncSniffer
 
 from src.database import init_db
@@ -20,6 +21,33 @@ def pkt_handler(pkt):
     syn.attack(pkt)
     icmp.attack(pkt)
     udp.attack(pkt)
+
+
+def draw_threshold_pps_graph() -> None:
+    if not udp.threshold_pps_history:
+        logger.info("No UDP threshold history to plot")
+        return
+
+    import matplotlib.pyplot as plt
+
+    times, values = zip(*udp.threshold_pps_history)
+    start_time = times[0]
+    x_values = [t - start_time for t in times]
+
+    os.makedirs("images", exist_ok=True)
+    output_path = os.path.join("images", "udp_threshold_pps.png")
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(x_values, values, marker="o")
+    plt.title("threshold_pps over time")
+    plt.xlabel("Seconds")
+    plt.ylabel("threshold_pps")
+    plt.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.savefig(output_path)
+    plt.close()
+
+    logger.info(f"Saved threshold graph to {output_path}")
 
 
 async def main():
@@ -56,4 +84,5 @@ if __name__ == "__main__":
         asyncio.run(main())
     except KeyboardInterrupt:
         logger.info("IDS stopped")
+        draw_threshold_pps_graph()
         exit(0)
