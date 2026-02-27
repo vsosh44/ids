@@ -1,6 +1,7 @@
 import sqlite3
+from pathlib import Path
 
-DB_PATH = "../blocked.db"
+DB_PATH = str(Path(__file__).resolve().parents[1] / "blocked.db")
 
 
 def get_conn() -> sqlite3.Connection:
@@ -56,5 +57,4 @@ def get_blocked_ips() -> set[str]:
 
 if __name__ == "__main__":
     init_db()
-    add_ip("192.168.211.134")
-    print(get_blocked_ips())
+    remove_ip("192.168.0.37")
