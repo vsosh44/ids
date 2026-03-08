@@ -12,11 +12,7 @@ TRUSTED_ASNS = {
     "AS16276",
     "AS8075",
     "AS47764",
-}
-
-TRUSTED_ORG = {
-    "google", "cloudflare", "amazon", "akamai", "fastly",
-    "microsoft", "yandex", "ovh", "hetzner"
+    "AS31898"
 }
 
 
@@ -31,7 +27,6 @@ def get_ip_reputation(ip: str):
         data = response.json()
 
         asn_str = str(data.get("asn", {}).get("asn", ""))
-        org_name = str(data.get("company", {}).get("name", "")).lower()
         abuser_score_str = data.get("company", {}).get("abuser_score", "0")
 
         try:
@@ -44,7 +39,7 @@ def get_ip_reputation(ip: str):
         is_vpn = data.get("is_vpn", False)
         is_tor = data.get("is_tor", False)
 
-        if asn_str in TRUSTED_ASNS or any(kw in org_name for kw in TRUSTED_ORG):
+        if asn_str in TRUSTED_ASNS:
             return "trusted", data.get("company", {}).get("name", "unknown"), asn_str
 
         if is_tor or is_proxy or is_vpn:
@@ -70,7 +65,3 @@ def check_ip(ip: str) -> tuple[bool, str]:
     if status == "suspicious":
         return False, asn
     return True, asn
-
-
-if __name__ == "__main__":
-    print(check_ip("192.168.211.132"))
