@@ -20,11 +20,6 @@ max_pps = 100.0
 learning_k = 5
 adaptive_k = 6
 WINDOW = 5.0
-threshold_pps_history = [(time.time(), threshold_pps)]
-
-
-def record_threshold(timestamp: float) -> None:
-    threshold_pps_history.append((timestamp, threshold_pps))
 
 
 def attack(pkt):
@@ -40,7 +35,6 @@ def attack(pkt):
             min_pps, max_pps,
             learning_k, adaptive_k
         )
-        record_threshold(now)
 
         last_reset = now
 
@@ -58,7 +52,7 @@ def attack(pkt):
 
         logger.info(f"[UDP] {src_ip=}, port={dst_port}, rate={current_pps:.1f} pps")
 
-        if current_pps > threshold_pps and current_pps > avg_pps * 3:
+        if not learning_phase and current_pps > threshold_pps and current_pps > avg_pps * 3:
             status, asn = check_ip(src_ip)
             if not status:
                 logger.info(f"[ATTACK] UDP-FLOOD from {src_ip} | "
