@@ -36,15 +36,6 @@ def block_ip_windows(ip: str) -> bool:
 
         logger.info(f"[BLOCK] {ip} → Windows Firewall")
         return True
-    except subprocess.CalledProcessError:
-        pass
-
-    try:
-        cmd_route = f'route add {ip} mask 255.255.255.255 0.0.0.0 -p'
-        subprocess.run(cmd_route, shell=True, capture_output=True, check=True)
-
-        logger.info(f"[BLOCK] {ip} → Null Route (blackhole)")
-        return True
     except subprocess.CalledProcessError as e:
         logger.error(f"Failed to block IP {ip}: {e}")
         return False
@@ -70,8 +61,6 @@ def unblock_ip_windows(ip: str) -> bool:
         subprocess.run(f'netsh advfirewall firewall delete rule name="Block_{ip.replace(".", "_")}_out"',
                        shell=True,
                        capture_output=True)
-
-        subprocess.run(f'route delete {ip}', shell=True, capture_output=True)
 
         logger.info(f"[UNBLOCK] {ip}")
         return True
