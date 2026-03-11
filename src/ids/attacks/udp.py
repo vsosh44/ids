@@ -16,9 +16,9 @@ learning_phase = True
 
 threshold_pps = 20.0
 min_pps = 10.0
-max_pps = 100.0
-learning_k = 5
-adaptive_k = 6
+max_pps = 2000.0
+learning_k = 100.0
+adaptive_k = 50.0
 WINDOW = 5.0
 
 

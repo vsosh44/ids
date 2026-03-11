@@ -15,10 +15,10 @@ last_reset = time.time()
 learning_phase = True
 
 threshold_pps = 20.0
-min_pps = 8.0
-max_pps = 50.0
-learning_k = 3
-adaptive_k = 3.2
+min_pps = 5
+max_pps = 200
+learning_k = 20
+adaptive_k = 10
 WINDOW = 2.0
 
 
