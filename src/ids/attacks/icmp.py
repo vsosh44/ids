@@ -9,7 +9,7 @@ from src.logs import logger
 from src.ids.check_ip import check_ip
 import src.ids.base as ids_base
 
-icmp_packets = defaultdict(deque)
+packets = defaultdict(deque)
 blocked_ips: set = get_blocked_ips()
 last_reset = time.time()
 learning_phase = True
@@ -23,13 +23,13 @@ WINDOW = 5.0
 
 
 def attack(pkt):
-    global last_reset, threshold_pps, learning_phase
+    global packets, last_reset, threshold_pps, learning_phase
 
     now = time.time()
 
     if now - last_reset > 30:
         learning_phase, threshold_pps = ids_base.update_thresholds(
-            icmp_packets,
+            packets,
             now,
             learning_phase,
             min_pps, max_pps,
@@ -46,9 +46,9 @@ def attack(pkt):
 
         src_ip = pkt[IP].src
 
-        icmp_packets[src_ip].append(now)
+        packets[src_ip].append(now)
 
-        current_pps, avg_pps = ids_base.get_pps(icmp_packets, src_ip, now, WINDOW)
+        packets, current_pps, avg_pps = ids_base.get_pps(packets, src_ip, now, WINDOW)
 
         logger.info(f"[ICMP] {src_ip=}, rate={current_pps:.1f} pps")
 
@@ -60,4 +60,4 @@ def attack(pkt):
 
                 block_ip(src_ip)
                 blocked_ips.add(src_ip)
-                icmp_packets[src_ip].clear()
+                packets[src_ip].clear()

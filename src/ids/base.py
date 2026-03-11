@@ -49,11 +49,13 @@ def update_thresholds(packets: defaultdict[str, deque],
     return learning_phase, threshold_pps
 
 
-def get_pps(packets: defaultdict[str, deque], ip: str, now: float, window: float) -> tuple[float, float]:
+def get_pps(packets: defaultdict[str, deque], ip: str, now: float, window: float) -> tuple[defaultdict[str, deque], float, float]:
     window_packets = prune_dict(packets, now, window, 0)
     avg_packets = prune_dict(packets, now, 20, window)
 
     current_pps = len(window_packets[ip]) / window
     avg_pps = (len(avg_packets[ip]) / 20)
 
-    return current_pps, avg_pps
+    packets = prune_dict(packets, now, 20 + window, 0)
+
+    return packets, current_pps, avg_pps
