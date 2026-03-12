@@ -1,5 +1,3 @@
-#!/opt/network_ids/venv/bin/python
-
 import os
 from typing import Optional
 
@@ -9,7 +7,7 @@ from src.cmd_utils import run_cmd
 
 
 def clear_screen():
-    os.system("clear")
+    os.system("cls" if os.name == "nt" else "clear")
 
 
 def enable_service(service_name="network_ids.service") -> Optional[str]:
