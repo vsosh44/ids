@@ -10,7 +10,7 @@
 sudo apt update
 sudo apt install curl
 
-curl -sSL https://raw.githubusercontent.com/nikita463/ids/refs/heads/main/install.sh | bash
+curl -sSL https://raw.githubusercontent.com/vsosh44/ids/refs/heads/main/install.sh | bash
 ```
 
 
@@ -23,7 +23,7 @@ network_ids
 ```
 
 <p align="center">
-<img alt="" src="https://github.com/nikita463/ids/blob/main/images/menu.png?raw=true" width=250>
+<img alt="" src="https://github.com/vsosh44/ids/blob/main/images/menu.png?raw=true" width=250>
 </p>
 
 
@@ -31,11 +31,11 @@ network_ids
 Для изменения настройки надо ввести номер поля и его новое значение указанного типа.
 
 <p align="center">
-<img alt="" src="https://github.com/nikita463/ids/blob/main/images/settings.png?raw=true" width=500>
+<img alt="" src="https://github.com/vsosh44/ids/blob/main/images/settings.png?raw=true" width=500>
 </p>
 
 <p align="center">
-<img alt="" src="https://github.com/nikita463/ids/blob/main/images/set_settings.png?raw=true" width=500>
+<img alt="" src="https://github.com/vsosh44/ids/blob/main/images/set_settings.png?raw=true" width=500>
 </p>
 
 
