@@ -34,17 +34,16 @@ def update_thresholds(packets: defaultdict[str, deque],
                       learning_phase: bool,
                       min_pps: float,
                       max_pps: float,
-                      learning_k: float,
-                      adaptive_k: float) -> tuple[bool, float]:
+                      k: float) -> tuple[bool, float]:
     pruned_packets = prune_dict(packets, now, 20, 0)
 
     avg_pps = sum(len(q) for q in pruned_packets.values()) / 20
 
     if learning_phase:
-        threshold_pps = max(min_pps, min(max_pps, avg_pps * learning_k))
+        threshold_pps = max(min_pps, min(max_pps, avg_pps * k * 2))
         learning_phase = False
     else:
-        threshold_pps = max(min_pps, min(max_pps, avg_pps * adaptive_k))
+        threshold_pps = max(min_pps, min(max_pps, avg_pps * k))
 
     return learning_phase, threshold_pps
 

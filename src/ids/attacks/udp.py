@@ -8,18 +8,14 @@ from src.database import get_blocked_ips
 from src.logs import logger
 from src.ids.check_ip import check_ip
 import src.ids.base as ids_base
+from src.config import settings
 
 packets = defaultdict(deque)
 blocked_ips: set = get_blocked_ips()
 last_reset = time.time()
 learning_phase = True
 
-threshold_pps = 20.0
-min_pps = 10.0
-max_pps = 2000.0
-learning_k = 100.0
-adaptive_k = 50.0
-WINDOW = 5.0
+threshold_pps = settings.udp_min_m
 
 
 def attack(pkt):
@@ -32,8 +28,8 @@ def attack(pkt):
             packets,
             now,
             learning_phase,
-            min_pps, max_pps,
-            learning_k, adaptive_k
+            settings.udp_min_m, settings.udp_max_m,
+            settings.udp_k
         )
 
         last_reset = now
@@ -48,7 +44,7 @@ def attack(pkt):
 
         packets[src_ip].append(now)
 
-        packets, current_pps, avg_pps = ids_base.get_pps(packets, src_ip, now, WINDOW)
+        packets, current_pps, avg_pps = ids_base.get_pps(packets, src_ip, now, settings.window)
 
         logger.info(f"[UDP] {src_ip=}, port={dst_port}, rate={current_pps:.1f} pps")
 

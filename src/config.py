@@ -8,14 +8,23 @@ CONFIG_FILE = "config.yaml"
 
 
 class Settings(BaseModel):
-    interface: str = Field(description="Имя сетевого интерейса", default="ens33")
+    window: float = Field(description="Окно подсчёта пакетов", default=2.0)
 
-    window: float = Field(description="Окно подсчёта пакетов", default=0.5)
-    m_syn: float = Field(description="Порог SYN, 1/сек", default=3.0)
-    m_icmp: float = Field(description="Порог ICMP, 1/сек", default=5.0)
-    m_udp: float = Field(description="Порог UDP, 1/сек", default=10.0)
+    tcp_min_m: float = Field(description="Минимальный порог TCP, 1/сек", default=30.0)
+    tcp_max_m: float = Field(description="Максимальный порог TCP, 1/сек", default=2500.0)
+    tcp_k: float = Field(description="Коэффициент адаптации порога TCP (PSH+ACK), 1/сек", default=10.0)
 
-    block_output: bool = Field(description="Блокировка исходящих пакетов", default=False)
+    syn_min_m: float = Field(description="Минимальный порог SYN, 1/сек", default=5.0)
+    syn_max_m: float = Field(description="Максимальный порог SYN, 1/сек", default=200.0)
+    syn_k: float = Field(description="Коэффициент адаптации порога SYN, 1/сек", default=10.0)
+
+    udp_min_m: float = Field(description="Минимальный порог UDP, 1/сек", default=10.0)
+    udp_max_m: float = Field(description="Максимальный порог UDP, 1/сек", default=2000.0)
+    udp_k: float = Field(description="Коэффициент адаптации порога UDP, 1/сек", default=50.0)
+
+    icmp_min_m: float = Field(description="Минимальный порог ICMP, 1/сек", default=5.0)
+    icmp_max_m: float = Field(description="Максимальный порог ICMP, 1/сек", default=500.0)
+    icmp_k: float = Field(description="Коэффициент адаптации порога ICMP, 1/сек", default=20.0)
 
 
 def save_settings(setts: Settings):
