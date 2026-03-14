@@ -34,31 +34,28 @@ def attack(pkt):
         last_reset = now
 
     if (IP in pkt and
+        TCP in pkt and
         pkt[IP].dst == ids_base.HOST_IP and
         pkt[IP].src not in blocked_ips and
         len(bytes(pkt[TCP].payload)) > 0 and
-        TCP in pkt and (
-            pkt[TCP].type == 0x10 or
-            pkt[TCP].type == 0x18
-        )):
+        pkt[TCP].flags in (0x10, 0x18)):
 
         src_ip = pkt[IP].src
         dst_port = pkt[TCP].dport
+        tcp_flags_label = "ACK" if pkt[TCP].flags == 0x10 else "PSH+ACK"
 
         packets[src_ip].append(now)
         packets, current_pps, avg_pps = ids_base.get_pps(packets, src_ip, now, settings.window)
 
-        logger.debug(
-            f"[TCP] src={src_ip}, dport={dst_port}, flags={"ACK" if pkt[TCP].flags == 0x10 else "PSH+ACK"}, "
-            f"rate={current_pps:.1f} pps, avg={avg_pps:.1f} pps, thr={threshold_pps:.1f} pps"
-        )
+        if settings.log_all:
+            logger.info(f"[TCP] IP: {src_ip}, Port: {dst_port}, Rate: {current_pps:.1f} pps, Flags: {tcp_flags_label}")
 
-        if not learning_phase and current_pps > threshold_pps and current_pps > avg_pps * 3:
+        if not learning_phase and current_pps > threshold_pps:
             status, asn = check_ip(src_ip)
             if not status:
                 logger.warning(
                     f"[ATTACK] TCP-FLOOD from {src_ip} to port {dst_port} | "
-                    f"rate={current_pps:.1f} pps | threshold={threshold_pps:.1f} pps | asn={asn}"
+                    f"Rate: {current_pps:.1f} pps | Threshold: {threshold_pps:.1f} pps"
                 )
 
                 block_ip(src_ip)
