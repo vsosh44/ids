@@ -7,7 +7,7 @@ init_db()
 
 from src.config import check_config
 from src.logs import logger
-from src.ids.attacks import icmp, syn, udp
+from src.ids.attacks import icmp, syn, udp, tcp
 from src.ids.cmds import blocked_ips
 
 stop_event = asyncio.Event()
@@ -17,6 +17,7 @@ def pkt_handler(pkt):
     if IP in pkt and pkt[IP].src in blocked_ips:
         return
 
+    tcp.attack(pkt)
     syn.attack(pkt)
     icmp.attack(pkt)
     udp.attack(pkt)
