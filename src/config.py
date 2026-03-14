@@ -10,6 +10,10 @@ CONFIG_FILE = "config.yaml"
 class Settings(BaseModel):
     window: float = Field(description="Окно подсчёта пакетов", default=2.0)
     log_all: bool = Field(description="Логирование всех пакетов", default=False)
+    ignored_ips: list[str] = Field(
+        description="Список IP-адресов, которые нельзя блокировать",
+        default_factory=list
+    )
 
     tcp_min_m: float = Field(description="Минимальный порог TCP, 1/сек", default=500.0)
     tcp_max_m: float = Field(description="Максимальный порог TCP, 1/сек", default=8000.0)

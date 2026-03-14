@@ -49,7 +49,7 @@ def attack(pkt):
         if settings.log_all:
             logger.info(f"[UDP] IP: {src_ip}, Port: {dst_port}, Rate: {current_pps:.1f} pps")
 
-        if not learning_phase and current_pps > threshold_pps:
+        if pkt[IP].src not in settings.ignored_ips and not learning_phase and current_pps > threshold_pps:
             status, asn = check_ip(src_ip)
             if not status:
                 logger.info(

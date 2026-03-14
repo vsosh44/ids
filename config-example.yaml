@@ -1,6 +1,19 @@
-block_output: false
-interface: ens33
-m_icmp: 5.0
-m_syn: 3.0
-m_udp: 10.0
-window: 0.5
+window: 2.0
+log_all: false
+ignored_ips: []
+
+tcp_min_m: 500.0
+tcp_max_m: 8000.0
+tcp_k: 10.0
+
+syn_min_m: 50.0
+syn_max_m: 500.0
+syn_k: 2.0
+
+udp_min_m: 50.0
+udp_max_m: 5000.0
+udp_k: 3.0
+
+icmp_min_m: 50.0
+icmp_max_m: 500.0
+icmp_k: 2.0
