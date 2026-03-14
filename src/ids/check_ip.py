@@ -3,23 +3,23 @@ from functools import lru_cache
 import ipaddress
 
 TRUSTED_ASNS = {
-    "AS15169",
-    "AS13335",
-    "AS16509",
-    "AS24940",
-    "AS54113",
-    "AS20940",
-    "AS16276",
-    "AS8075",
-    "AS47764",
-    "AS31898"
+    "15169",
+    "13335",
+    "16509",
+    "24940",
+    "54113",
+    "20940",
+    "16276",
+    "8075",
+    "47764",
+    "31898"
 }
 
 
 @lru_cache(maxsize=1000)
 def get_ip_reputation(ip: str):
     try:
-        response = requests.get(f"https://api.ipapi.is/?q={ip}", timeout=6)
+        response = requests.get(f"https://api.ipapi.is/?q={ip}", timeout=2)
 
         if response.status_code != 200:
             return "neutral", "unknown", "unknown"
@@ -45,7 +45,7 @@ def get_ip_reputation(ip: str):
         if is_tor or is_proxy or is_vpn:
             return "suspicious", data.get("company", {}).get("name", "unknown"), asn_str
 
-        if is_abuser and abuser_score > 60:
+        if is_abuser and abuser_score > 0.5:
             return "suspicious", data.get("company", {}).get("name", "unknown"), asn_str
 
         return "neutral", data.get("company", {}).get("name", "unknown"), asn_str
