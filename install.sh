@@ -12,7 +12,7 @@ MENU_PATH="$PROJECT_DIR/src/menu/menu.py"
 
 
 sudo mkdir -p $PROJECT_DIR
-sudo git clone https://github.com/nikita463/ids.git $PROJECT_DIR
+sudo git clone https://github.com/vsosh44/ids.git $PROJECT_DIR
 sudo chown -R $USER:$USER $PROJECT_DIR
 
 
