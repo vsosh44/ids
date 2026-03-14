@@ -46,13 +46,16 @@ def attack(pkt):
 
         packets, current_pps, avg_pps = ids_base.get_pps(packets, src_ip, now, settings.window)
 
-        logger.info(f"[ICMP] {src_ip=}, rate={current_pps:.1f} pps")
+        if settings.log_all:
+            logger.info(f"[ICMP] IP: {src_ip}, Rate: {current_pps:.1f} pps")
 
-        if not learning_phase and current_pps > threshold_pps and current_pps > avg_pps * 3:
+        if not learning_phase and current_pps > threshold_pps:
             status, asn = check_ip(src_ip)
             if not status:
-                logger.info(f"[ATTACK] ICMP-FLOOD from {src_ip} | "
-                            f"Rate: {current_pps:.1f} pps | Threshold: {threshold_pps:.1f} pps")
+                logger.info(
+                    f"[ATTACK] ICMP-FLOOD from {src_ip} | "
+                    f"Rate: {current_pps:.1f} pps | Threshold: {threshold_pps:.1f} pps"
+                )
 
                 block_ip(src_ip)
                 blocked_ips.add(src_ip)
