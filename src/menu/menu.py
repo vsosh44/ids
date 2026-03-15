@@ -55,9 +55,9 @@ def edit_settings_menu(settings: Settings):
         return
 
     field_info = get_field_info(settings, ind)
-    obj = input(f"Введите новое значение поля ({field_info.annotation.__name__}): ")
+    obj = input(f"Введите новое значение поля ({field_info.annotation_name}): ")
     while (type_obj := ret_str_type(obj, field_info.annotation)) is None:
-        obj = input(f"Введите значение указанного типа ({field_info.annotation.__name__}): ")
+        obj = input(f"Введите значение указанного типа ({field_info.annotation_name}): ")
 
     setattr(settings, field_info.name, type_obj)
     save_settings(settings)

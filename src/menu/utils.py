@@ -1,11 +1,12 @@
+from typing import Any, get_origin, Optional
 from pydantic import BaseModel
-from typing import Optional, Any
 
 class FieldInfo(BaseModel):
     name: str
     value: object
     description: str
-    annotation: type
+    annotation: Any
+    annotation_name: str
 
 
 def get_field_info(model: BaseModel, ind: int) -> FieldInfo:
@@ -13,12 +14,22 @@ def get_field_info(model: BaseModel, ind: int) -> FieldInfo:
     name, info = field
     description = getattr(info, "description")
     value = getattr(model, name)
-    annotation = getattr(info, "annotation")
+
+    raw_annotation = getattr(info, "annotation")
+    origin = get_origin(raw_annotation)
+    normalized_annotation = origin if origin is not None else raw_annotation
+
+    if not isinstance(normalized_annotation, type):
+        normalized_annotation = str
+
+    annotation_name = getattr(raw_annotation, "__name__", str(raw_annotation))
+
     return FieldInfo(
         name=name,
         value=value,
         description=description if description else "",
-        annotation=annotation
+        annotation=normalized_annotation,
+        annotation_name=annotation_name
     )
 
 
