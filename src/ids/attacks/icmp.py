@@ -14,12 +14,13 @@ packets = defaultdict(deque)
 blocked_ips: set = get_blocked_ips()
 last_reset = time.time()
 learning_phase = True
+if_streak = defaultdict(int)
 
 threshold_pps = settings.icmp_min_m
 
 
 def attack(pkt):
-    global packets, last_reset, threshold_pps, learning_phase
+    global packets, last_reset, threshold_pps, learning_phase, if_streak
 
     now = time.time()
 
@@ -46,10 +47,15 @@ def attack(pkt):
 
         packets, current_pps, avg_pps = ids_base.get_pps(packets, src_ip, now, settings.window)
 
+        if current_pps > threshold_pps:
+            if_streak[src_ip] += 1
+        else:
+            if_streak[src_ip] = 0
+
         if settings.log_all:
             logger.info(f"[ICMP] IP: {src_ip}, Rate: {current_pps:.1f} pps")
 
-        if pkt[IP].src not in settings.ignored_ips and not learning_phase and current_pps > threshold_pps:
+        if pkt[IP].src not in settings.ignored_ips and not learning_phase and if_streak[src_ip] >= 3:
             status, asn = check_ip(src_ip)
             if not status:
                 logger.info(
@@ -60,3 +66,4 @@ def attack(pkt):
                 block_ip(src_ip)
                 blocked_ips.add(src_ip)
                 packets[src_ip].clear()
+                if_streak[src_ip] = 0
