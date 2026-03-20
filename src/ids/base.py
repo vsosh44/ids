@@ -41,7 +41,7 @@ def update_thresholds(packets: defaultdict[str, deque],
 
     threshold_pps = max(min_pps, min(max_pps, avg_pps * k))
 
-    return learning_phase, threshold_pps
+    return False, threshold_pps
 
 
 def get_pps(packets: defaultdict[str, deque], ip: str, now: float, window: float) -> tuple[defaultdict[str, deque], float, float]:
