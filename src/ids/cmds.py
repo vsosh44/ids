@@ -19,9 +19,8 @@ def block_ip_linux(ip: str) -> bool:
     cmd = f"iptables -A INPUT -s {ip} -j DROP"
     subprocess.run(cmd, shell=True, capture_output=True, check=True)
     
-    if settings.block_output:
-        cmd = f"iptables -A OUTPUT -s {ip} -j DROP"
-        subprocess.run(cmd, shell=True, capture_output=True, check=True)
+    cmd = f"iptables -A OUTPUT -s {ip} -j DROP"
+    subprocess.run(cmd, shell=True, capture_output=True, check=True)
     return True
 
 
