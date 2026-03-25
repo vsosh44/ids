@@ -1,6 +1,7 @@
 from collections import deque, defaultdict
 
 from src.ids.cmds import get_host_ip
+from src.logs import logger
 
 HOST_IP = get_host_ip()
 
@@ -40,6 +41,9 @@ def update_thresholds(packets: defaultdict[str, deque],
     avg_pps = sum(len(q) for q in pruned_packets.values()) / 20
 
     threshold_pps = max(min_pps, min(max_pps, avg_pps * k))
+
+    if learning_phase:
+        logger.info("Learning phase ended")
 
     return False, threshold_pps
 
